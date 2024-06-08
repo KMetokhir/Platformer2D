@@ -1,23 +1,29 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Mover), typeof(Rigidbody2D), typeof(PlayerView))]
-[RequireComponent(typeof(CollisionChecker))]
+[RequireComponent(typeof(CollisionChecker), (typeof(GroundChecker)))]
+[RequireComponent(typeof(Jumper))]
 public class Player : MonoBehaviour
 {
     [SerializeField] InputReader _input;
     [SerializeField] Wallet _wallet;
 
     private Mover _mover;
+    private Jumper _jumper;
     private PlayerView _view;
     private CollisionChecker _collisionChecker;
+    private GroundChecker _groundChecker;
 
     private void Awake()
     {
         _mover = GetComponent<Mover>();
+        _jumper = GetComponent<Jumper>();
         Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
         _view = GetComponent<PlayerView>();
+        _groundChecker = GetComponent<GroundChecker>();
 
-        _mover.Init(rigidbody);
+        _mover.Init(rigidbody, _groundChecker);
+        _jumper.Init(rigidbody, _groundChecker);
 
         _collisionChecker = GetComponent<CollisionChecker>();
     }
@@ -26,8 +32,10 @@ public class Player : MonoBehaviour
     {
         _mover.FacingChanged += OnFacingchanged;
         _mover.StartsMoving += OnStartsMoving;
-        _mover.StopedMoving += OnStopedMoving;
-        _mover.GroundStatusChanged += OnGroundStatusChanged;
+        _mover.StopedMoving += OnStopedMoving;        
+
+        _jumper.JumpStart += OnJumpStart;
+        _jumper.JumpEnd += OnJumpEnd;
 
         _collisionChecker.CollectableCollision += OnCollectableCollision;
 
@@ -39,8 +47,10 @@ public class Player : MonoBehaviour
     {
         _mover.FacingChanged -= OnFacingchanged;
         _mover.StartsMoving -= OnStartsMoving;
-        _mover.StopedMoving -= OnStopedMoving;
-        _mover.GroundStatusChanged -= OnGroundStatusChanged;
+        _mover.StopedMoving -= OnStopedMoving;       
+
+        _jumper.JumpStart -= OnJumpStart;
+        _jumper.JumpEnd -= OnJumpEnd;
 
         _collisionChecker.CollectableCollision -= OnCollectableCollision;
 
@@ -48,9 +58,19 @@ public class Player : MonoBehaviour
         _input.JumpButtonPressed -= OnJumpButtonPressed;
     }
 
+    private void OnJumpStart()
+    {
+        _view.SetJumpStatus(true);
+    }
+
+    private void OnJumpEnd()
+    {
+        _view.SetJumpStatus(false);
+    }
+
     private void OnJumpButtonPressed()
     {
-        _mover.SetJump();
+        _jumper.SetJump();
     }
 
     private void OnHorizontalDirectionChanged(float direction)
@@ -64,11 +84,6 @@ public class Player : MonoBehaviour
         {
             _wallet.IncreaseMoney(collectable.Collect());
         }
-    }
-
-    private void OnGroundStatusChanged(bool isGrounded)
-    {
-        _view.SetJumpStatus(isGrounded);
     }
 
     private void OnStopedMoving()

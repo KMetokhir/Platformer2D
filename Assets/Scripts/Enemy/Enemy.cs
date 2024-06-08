@@ -1,12 +1,14 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Mover), typeof(Rigidbody2D), typeof(PatrolLogic))]
+[RequireComponent (typeof(GroundChecker))]
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private Vector2 _patrolAria;
 
     private PatrolLogic _patrolLogic;
     private Mover _mover;
+    private GroundChecker _groundChecker;
 
     private EnemyView _view;
 
@@ -14,7 +16,9 @@ public class Enemy : MonoBehaviour
     {
         _mover = GetComponent<Mover>();
         Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
-        _mover.Init(rigidbody);
+        _groundChecker = GetComponent<GroundChecker>();
+
+        _mover.Init(rigidbody, _groundChecker);
 
         _patrolLogic = GetComponent<PatrolLogic>();
         _patrolLogic.Init(_patrolAria, transform);

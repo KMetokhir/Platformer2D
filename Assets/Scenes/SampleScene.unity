@@ -545,6 +545,7 @@ GameObject:
   - component: {fileID: 1864703951}
   - component: {fileID: 1864703950}
   - component: {fileID: 1864703949}
+  - component: {fileID: 1864703958}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -617,13 +618,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  jumpingPower: 700
   _gravityScale: 3
-  _groundCheck: {fileID: 1896299682}
-  _groungCheckerRadius: 0.2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!58 &1864703953
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -760,6 +755,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af1873479b98e7545b09798cb3298cca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1864703958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1864703948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b45bca94085f534987b388d1b07d74d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _groundCheck: {fileID: 1896299682}
+  _groungCheckerRadius: 0.2
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &1896299681
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,7 +882,9 @@ GameObject:
   - component: {fileID: 5759357514991533477}
   - component: {fileID: 440775716027204508}
   - component: {fileID: 3457827068584736977}
+  - component: {fileID: 8664333698040733613}
   - component: {fileID: 5603127831304431468}
+  - component: {fileID: 8664333698040733614}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -970,13 +984,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
-  jumpingPower: 700
   _gravityScale: 3
-  _groundCheck: {fileID: 7204003289694455550}
-  _groungCheckerRadius: 0.2
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!114 &1697953819226733133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2053,6 +2061,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8664333698040733613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 63766948451021213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b45bca94085f534987b388d1b07d74d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _groundCheck: {fileID: 7204003289694455550}
+  _groungCheckerRadius: 0.2
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!114 &8664333698040733614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 63766948451021213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e30b146d7ddb22741aef5f36b23bb67d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpingPower: 700
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

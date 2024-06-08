@@ -4,22 +4,17 @@ using UnityEngine;
 public class Mover : MonoBehaviour
 {
     [SerializeField] private float speed = 8f;
-    [SerializeField] private float jumpingPower = 700f;
-    [SerializeField] private float _gravityScale = 3;
+    [SerializeField] private float _gravityScale = 3;    
 
-    [SerializeField] private Transform _groundCheck;
-    [SerializeField] private float _groungCheckerRadius = 0.2f;
-    [SerializeField] private LayerMask groundLayer;
+    private GroundChecker _groundChecker;
 
-    private float _horizontalMove;
-    private bool _isJump = false;
+    private float _horizontalMove;   
 
     private Rigidbody2D _rigidbody;
     private bool _isInited = false;
-    private bool _isMoving = false;
+    private bool _isMoving = false;   
 
     public event Action<float> FacingChanged;
-    public event Action<bool> GroundStatusChanged;
     public event Action StartsMoving;
     public event Action StopedMoving;
 
@@ -30,17 +25,15 @@ public class Mover : MonoBehaviour
             return;
         }
 
-        InvokeMovingEvents();
-        GroundStatusChanged?.Invoke(!IsGrounded());
+        InvokeMovingEvents();       
     }
 
     private void FixedUpdate()
     {
-        Move();
-        Jump();
+        Move();      
     }
 
-    public void Init(Rigidbody2D rigidbody)
+    public void Init(Rigidbody2D rigidbody, GroundChecker groundChecker)
     {
         if (_isInited)
         {
@@ -49,6 +42,7 @@ public class Mover : MonoBehaviour
 
         _isInited = true;
         _rigidbody = rigidbody;
+        _groundChecker = groundChecker;
 
         _rigidbody.gravityScale = _gravityScale;
     }
@@ -65,25 +59,8 @@ public class Mover : MonoBehaviour
         _horizontalMove = horizontalMove;
     }
 
-    public void SetJump()
-    {
-        ThrowNotInitedException();
-
-        _isJump = true;
-    }
-
-    private void Jump()
-    {
-        if (IsGrounded() && _isJump)
-        {
-            _isJump = false;
-            _rigidbody.AddForce(Vector2.up * jumpingPower);
-        }
-    }
-
     private void InvokeMovingEvents()
     {
-
         if (_rigidbody.velocity.x != 0 && _rigidbody.velocity.y == 0)
         {
             if (_isMoving == false)
@@ -104,7 +81,7 @@ public class Mover : MonoBehaviour
 
     private void Move()
     {
-        if (IsGrounded())
+        if (_groundChecker.IsGrounded)
         {
             _rigidbody.velocity = new Vector2(_horizontalMove * speed, _rigidbody.velocity.y);
         }
@@ -114,12 +91,7 @@ public class Mover : MonoBehaviour
     {
         if (_isInited == false)
         {
-            throw new Exception("Mover dosn't inited");
+            throw new Exception("Mover dosen't inited");
         }
-    }
-
-    private bool IsGrounded()
-    {
-        return Physics2D.OverlapCircle(_groundCheck.position, _groungCheckerRadius, groundLayer);
-    }
+    }   
 }
