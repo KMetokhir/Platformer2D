@@ -4,7 +4,7 @@ using UnityEngine;
 public class PatrolLogic : MonoBehaviour
 {
     private const float RightHorizontalDirection = 1;
-    private const float LeftHorizontalDirection = -1;   
+    private const float LeftHorizontalDirection = -1;
 
     private Vector2 _patrolAria;
     private float _currentHorizontaldirection = 0;
@@ -12,30 +12,28 @@ public class PatrolLogic : MonoBehaviour
 
     private bool _isInited = false;
 
-    public event Action<float> HorizontalDirectionChanged;    
+    public event Action<float> HorizontalDirectionChanged;
 
     private void Update()
     {
-        if(_isInited == false)
+        if (_isInited == false)
         {
             return;
         }
 
         if (TryGetHorizontalDirection(out float direction))
         {
-            Debug.Log("get direction true");
-
             if (_currentHorizontaldirection != direction)
             {
                 _currentHorizontaldirection = direction;
                 HorizontalDirectionChanged?.Invoke(_currentHorizontaldirection);
             }
         }
-    }   
+    }
 
     public void StartPatrol()
     {
-        if (_isInited==false || _currentHorizontaldirection != 0)
+        if (_isInited == false || _currentHorizontaldirection != 0)
         {
             return;
         }
@@ -51,12 +49,10 @@ public class PatrolLogic : MonoBehaviour
             return;
         }
 
-        Debug.Log("In init");
-
         _isInited = true;
 
         _patrolAria = patrolAria;
-        _patroller = patroller;            
+        _patroller = patroller;
     }
 
     private bool TryGetHorizontalDirection(out float horizontalDirection)

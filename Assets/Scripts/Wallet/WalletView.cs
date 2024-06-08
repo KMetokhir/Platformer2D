@@ -13,7 +13,7 @@ public class WalletView : MonoBehaviour
 
     private void OnDisable()
     {
-        _wallet.MoneyValueChanged -= OnMoneyValueChanged;             
+        _wallet.MoneyValueChanged -= OnMoneyValueChanged;
     }
 
     private void OnMoneyValueChanged(uint value)

@@ -23,14 +23,12 @@ public class Mover : MonoBehaviour
     public event Action StartsMoving;
     public event Action StopedMoving;
 
-    private void Awake()
-    {
-        _rigidbody.gravityScale = _gravityScale;
-    }
-
     private void Update()
     {
-        if (_isInited == false) return;
+        if (_isInited == false)
+        {
+            return;
+        }
 
         InvokeMovingEvents();
         GroundStatusChanged?.Invoke(!IsGrounded());
@@ -50,7 +48,9 @@ public class Mover : MonoBehaviour
         }
 
         _isInited = true;
-        _rigidbody = rigidbody;       
+        _rigidbody = rigidbody;
+
+        _rigidbody.gravityScale = _gravityScale;
     }
 
     public void SetHorizontalDirection(float horizontalMove)
@@ -83,6 +83,7 @@ public class Mover : MonoBehaviour
 
     private void InvokeMovingEvents()
     {
+
         if (_rigidbody.velocity.x != 0 && _rigidbody.velocity.y == 0)
         {
             if (_isMoving == false)
@@ -115,7 +116,7 @@ public class Mover : MonoBehaviour
         {
             throw new Exception("Mover dosn't inited");
         }
-    } 
+    }
 
     private bool IsGrounded()
     {

@@ -19,6 +19,11 @@ public class CoinView : MonoBehaviour
         _coin.Collected += OnCoinCollected;
     }
 
+    private void OnDisable()
+    {
+        _coin.Collected -= OnCoinCollected;
+    }
+
     public void OnDestroyAnimationEnd()
     {
         _coin.Destroy();

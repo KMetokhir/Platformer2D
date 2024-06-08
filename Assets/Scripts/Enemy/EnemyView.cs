@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyView : MonoBehaviour
 {
-    private const string RunBoolVariable = "IsRuning"; 
+    private const string RunBoolVariable = "IsRuning";
 
     private bool _isFacingRight = true;
     private Animator _animator;

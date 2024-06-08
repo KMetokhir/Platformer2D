@@ -4,7 +4,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private Vector2 _patrolAria;
-    
+
     private PatrolLogic _patrolLogic;
     private Mover _mover;
 
@@ -16,10 +16,10 @@ public class Enemy : MonoBehaviour
         Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
         _mover.Init(rigidbody);
 
-        _patrolLogic= GetComponent<PatrolLogic>();
+        _patrolLogic = GetComponent<PatrolLogic>();
         _patrolLogic.Init(_patrolAria, transform);
 
-        _view= GetComponent<EnemyView>();
+        _view = GetComponent<EnemyView>();
     }
 
     private void OnEnable()
@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour
 
     private void Start()
     {
-        _patrolLogic.StartPatrol();        
+        _patrolLogic.StartPatrol();
     }
 
     private void OnDisable()
@@ -41,11 +41,10 @@ public class Enemy : MonoBehaviour
 
         _mover.FacingChanged -= OnFacingchanged;
         _mover.StartsMoving -= OnStartsMoving;
-    }      
+    }
 
     private void OnHorizontalDirectionChanged(float direction)
     {
-        Debug.Log("In enemy move");
         _mover.SetHorizontalDirection(direction);
     }
 

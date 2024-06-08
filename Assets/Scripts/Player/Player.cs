@@ -9,8 +9,7 @@ public class Player : MonoBehaviour
 
     private Mover _mover;
     private PlayerView _view;
-    private CollisionChecker _collisionChecker;   
-    
+    private CollisionChecker _collisionChecker;
 
     private void Awake()
     {
@@ -20,7 +19,7 @@ public class Player : MonoBehaviour
 
         _mover.Init(rigidbody);
 
-        _collisionChecker = GetComponent<CollisionChecker>();       
+        _collisionChecker = GetComponent<CollisionChecker>();
     }
 
     private void OnEnable()
@@ -30,7 +29,7 @@ public class Player : MonoBehaviour
         _mover.StopedMoving += OnStopedMoving;
         _mover.GroundStatusChanged += OnGroundStatusChanged;
 
-        _collisionChecker.CollectableCollision += OnCollectableCollision;     
+        _collisionChecker.CollectableCollision += OnCollectableCollision;
 
         _input.HorizontalDirectionChanged += OnHorizontalDirectionChanged;
         _input.JumpButtonPressed += OnJumpButtonPressed;
@@ -57,7 +56,7 @@ public class Player : MonoBehaviour
     private void OnHorizontalDirectionChanged(float direction)
     {
         _mover.SetHorizontalDirection(direction);
-    }   
+    }
 
     private void OnCollectableCollision(ICollectable collectable)
     {

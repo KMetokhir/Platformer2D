@@ -11,7 +11,5 @@ public class CollisionChecker : MonoBehaviour
         {
             CollectableCollision.Invoke(collectable);
         }
-
-
     }
 }
