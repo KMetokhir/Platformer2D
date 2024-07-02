@@ -3,6 +3,7 @@ using UnityEngine;
 public class EnemyView : MonoBehaviour
 {
     private const string RunBoolVariable = "IsRuning";
+    private const string HitTrigger = "Hit";
 
     private bool _isFacingRight = true;
     private Animator _animator;
@@ -15,6 +16,16 @@ public class EnemyView : MonoBehaviour
     public void PlayRunAnimation()
     {
         _animator.SetBool(RunBoolVariable, true);
+    }
+
+    public void PlayIdleAnimation()
+    {
+        _animator.SetBool(RunBoolVariable, false);
+    }
+
+    public void PlayAttackAnimation()
+    {
+        _animator.SetTrigger(HitTrigger);
     }
 
     public void Flip(float facingDirection)

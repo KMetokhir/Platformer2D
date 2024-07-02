@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Coin : MonoBehaviour, ICollectable
+public abstract class Collectable : MonoBehaviour, ICollectable
 {
     [SerializeField] private uint _value;
 

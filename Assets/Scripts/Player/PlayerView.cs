@@ -4,6 +4,7 @@ public class PlayerView : MonoBehaviour
 {
     private const string RunBoolVariable = "IsRuning";
     private const string JumpBoolVariable = "IsJumping";
+    private const string HitTrigger = "Hit";
 
     private bool _isFacingRight = true;
     private Animator _animator;
@@ -23,9 +24,14 @@ public class PlayerView : MonoBehaviour
         _animator.SetBool(RunBoolVariable, false);
     }
 
+    public void PlayAttackAnimation()
+    {
+        _animator.SetTrigger(HitTrigger);
+    }
+
     public void SetJumpStatus(bool isJumping)
     {
-        _animator.SetBool(JumpBoolVariable, isJumping);
+        _animator.SetBool(JumpBoolVariable, isJumping);    
     }
 
     public void Flip(float facingDirection)

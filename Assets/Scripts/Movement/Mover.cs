@@ -4,19 +4,19 @@ using UnityEngine;
 public class Mover : MonoBehaviour
 {
     [SerializeField] private float speed = 8f;
-    [SerializeField] private float _gravityScale = 3;    
+    [SerializeField] private float _gravityScale = 3;
 
     private GroundChecker _groundChecker;
-
-    private float _horizontalMove;   
-
     private Rigidbody2D _rigidbody;
+
     private bool _isInited = false;
-    private bool _isMoving = false;   
+    private bool _isMoving = false;
 
     public event Action<float> FacingChanged;
     public event Action StartsMoving;
     public event Action StopedMoving;
+
+    public float HorizontalDirection { get; private set; }
 
     private void Update()
     {
@@ -25,12 +25,12 @@ public class Mover : MonoBehaviour
             return;
         }
 
-        InvokeMovingEvents();       
+        SetIsMoving();
     }
 
     private void FixedUpdate()
     {
-        Move();      
+        Move();
     }
 
     public void Init(Rigidbody2D rigidbody, GroundChecker groundChecker)
@@ -51,31 +51,33 @@ public class Mover : MonoBehaviour
     {
         ThrowNotInitedException();
 
-        if (horizontalMove != _horizontalMove)
+        if (horizontalMove != HorizontalDirection && horizontalMove != 0)
         {
             FacingChanged?.Invoke(horizontalMove);
         }
 
-        _horizontalMove = horizontalMove;
+        if (HorizontalDirection != 0 && horizontalMove == 0)
+        {
+            StopedMoving?.Invoke();
+        }
+
+        HorizontalDirection = horizontalMove;
     }
 
-    private void InvokeMovingEvents()
+    private void SetIsMoving()
     {
-        if (_rigidbody.velocity.x != 0 && _rigidbody.velocity.y == 0)
+        if (_rigidbody.velocity.x != 0 && _groundChecker.IsGrounded && HorizontalDirection != 0)
         {
             if (_isMoving == false)
             {
-                _isMoving = true;
                 StartsMoving?.Invoke();
             }
+
+            _isMoving = true;
         }
-        else if (_rigidbody.velocity.y == 0)
+        else
         {
-            if (_isMoving == true)
-            {
-                _isMoving = false;
-                StopedMoving?.Invoke();
-            }
+            _isMoving = false;
         }
     }
 
@@ -83,7 +85,7 @@ public class Mover : MonoBehaviour
     {
         if (_groundChecker.IsGrounded)
         {
-            _rigidbody.velocity = new Vector2(_horizontalMove * speed, _rigidbody.velocity.y);
+            _rigidbody.velocity = new Vector2(HorizontalDirection * speed, _rigidbody.velocity.y);
         }
     }
 
@@ -93,5 +95,5 @@ public class Mover : MonoBehaviour
         {
             throw new Exception("Mover dosen't inited");
         }
-    }   
+    }
 }

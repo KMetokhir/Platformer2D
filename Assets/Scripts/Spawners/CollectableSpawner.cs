@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoinSpawner : MonoBehaviour
+public class CollectableSpawner : MonoBehaviour
 {
-    [SerializeField] private Coin _coinPrefab;
+    [SerializeField] private Collectable _collectablePrefab;
     [SerializeField] private List<Transform> _spawnPosition;
 
     private void Awake()
@@ -21,6 +21,6 @@ public class CoinSpawner : MonoBehaviour
 
     private void Spawn(Vector3 position)
     {
-        Instantiate(_coinPrefab, position, Quaternion.identity);
+        Instantiate(_collectablePrefab, position, Quaternion.identity);
     }
 }

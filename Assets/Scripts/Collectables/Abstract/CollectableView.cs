@@ -1,32 +1,32 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Animator), typeof(Coin))]
-public class CoinView : MonoBehaviour
+[RequireComponent(typeof(Animator))]
+public abstract class CollectableView : MonoBehaviour
 {
     private const string RunBoolVariable = "IsDestroy";
 
-    private Coin _coin;
+    private Collectable _collectableModel;
     private Animator _animator;
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-        _coin = GetComponent<Coin>();
+        _collectableModel = GetComponent<Collectable>();
     }
 
     private void OnEnable()
     {
-        _coin.Collected += OnCoinCollected;
+        _collectableModel.Collected += OnCoinCollected;
     }
 
     private void OnDisable()
     {
-        _coin.Collected -= OnCoinCollected;
+        _collectableModel.Collected -= OnCoinCollected;
     }
 
     public void OnDestroyAnimationEnd()
     {
-        _coin.Destroy();
+        _collectableModel.Destroy();
     }
 
     private void OnCoinCollected()
