@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AbstractMoveInBoundsBehaviour : MonoBehaviour
+public abstract class AbstractMoveInBoundsBehaviour : MonoBehaviour
 {
     protected const float RightHorizontalDirection = 1;
     protected const float LeftHorizontalDirection = -1;

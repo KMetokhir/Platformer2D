@@ -8,23 +8,24 @@ public class Jumper : MonoBehaviour
     private GroundChecker _groundChecker;
     private Rigidbody2D _rigidbody;
 
-    private bool _isCanJump = false;
+    private bool _canJump = false;
     private bool _isJumping = false;
     private bool _isInited = false;
 
-    public event Action JumpStart; 
+    public event Action JumpStart;
     public event Action JumpEnd;
 
     private void FixedUpdate()
-    {       
+    {
         Jump();
     }
 
     private void LateUpdate()
     {
-        if (_isJumping)
+        if (IsJumpEnd())
         {
-            InvokeJumpEndEvent();
+            JumpEnd?.Invoke();
+            _isJumping = false;
         }
     }
 
@@ -37,32 +38,28 @@ public class Jumper : MonoBehaviour
 
         _isInited = true;
         _rigidbody = rigidbody;
-        _groundChecker = groundChecker;      
+        _groundChecker = groundChecker;
     }
 
     public void SetJump()
     {
         ThrowNotInitedException();
 
-        _isCanJump = true;
+        _canJump = true;
     }
 
-    private void InvokeJumpEndEvent()
+    private bool IsJumpEnd()
     {
-        if(_groundChecker.IsGrounded && _rigidbody.velocity.y==0)
-        {
-            JumpEnd?.Invoke();
-            _isJumping = false;
-        }
+        return _isJumping && _groundChecker.IsGrounded;
     }
-    
+
     private void Jump()
     {
-        if (_groundChecker.IsGrounded && _isCanJump)
+        if (_groundChecker.IsGrounded && _canJump)
         {
-            _isCanJump = false;  
-            _isJumping = true;
             _rigidbody.AddForce(Vector2.up * jumpingPower);
+            _canJump = false;
+            _isJumping = true;            
 
             JumpStart?.Invoke();
         }

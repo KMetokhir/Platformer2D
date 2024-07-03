@@ -1,47 +1,18 @@
 using UnityEngine;
 
-public class PlayerView : MonoBehaviour
+public class PlayerView : AbstractMovableView
 {
-    private const string RunBoolVariable = "IsRuning";
-    private const string JumpBoolVariable = "IsJumping";
-    private const string HitTrigger = "Hit";
+    public readonly int IsJumping = Animator.StringToHash(nameof(IsJumping));
 
-    private bool _isFacingRight = true;
-    private Animator _animator;
-
-    private void Awake()
+    public void PlayJump()
     {
-        _animator = GetComponent<Animator>();
+        bool isJumping = true;
+        Animator.SetBool(IsJumping, isJumping);
     }
 
-    public void PlayRunAnimation()
+    public void StopPlayingJump()
     {
-        _animator.SetBool(RunBoolVariable, true);
-    }
-
-    public void PlayIdleAnimation()
-    {
-        _animator.SetBool(RunBoolVariable, false);
-    }
-
-    public void PlayAttackAnimation()
-    {
-        _animator.SetTrigger(HitTrigger);
-    }
-
-    public void SetJumpStatus(bool isJumping)
-    {
-        _animator.SetBool(JumpBoolVariable, isJumping);    
-    }
-
-    public void Flip(float facingDirection)
-    {
-        if (_isFacingRight && facingDirection < 0f || !_isFacingRight && facingDirection > 0f)
-        {
-            _isFacingRight = !_isFacingRight;
-            Vector3 localScale = transform.localScale;
-            localScale.x *= -1f;
-            transform.localScale = localScale;
-        }
+        bool isJumping = false;
+        Animator.SetBool(IsJumping, isJumping);
     }
 }

@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    private const uint MaxValue = 100;
-
+    [SerializeField] private uint _maxValue = 100;
     [SerializeField] private uint _value;
 
     public void Decrease(uint damage)
@@ -22,6 +21,6 @@ public class Health : MonoBehaviour
 
     public void Increase(uint treatment)
     {
-        _value = (_value + treatment) > _value ? MaxValue : _value += treatment;
+        _value = (_value + treatment) > _value ? _maxValue : _value += treatment;
     }
 }

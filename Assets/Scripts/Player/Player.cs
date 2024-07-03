@@ -88,13 +88,12 @@ public class Player : MonoBehaviour, IDamageable
 
     private void OnJumpStart()
     {
-        _view.SetJumpStatus(true);
+        _view.PlayJump();
     }
 
     private void OnJumpEnd()
     {
-        _view.SetJumpStatus(false);
-
+        _view.StopPlayingJump();
     }
 
     private void OnDamageableFound(IDamageable damageable)
