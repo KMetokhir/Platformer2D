@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Mover), typeof(Rigidbody2D), typeof(PatrolBehaviour))]
 [RequireComponent(typeof(GroundChecker), typeof(DamageableDetector))]
-public class Enemy : MonoBehaviour, IDamageable
+public class Enemy : MonoBehaviour, IDamageable, IVampireTarget
 {
     [SerializeField] private Vector2 _patrolAria;
     [SerializeField] private Health _health;
@@ -35,7 +35,6 @@ public class Enemy : MonoBehaviour, IDamageable
         _chaseBehaviour = GetComponent<ChaseBehaviour>();
 
         _view = GetComponent<EnemyView>();
-
     }
 
     private void OnEnable()
@@ -70,6 +69,13 @@ public class Enemy : MonoBehaviour, IDamageable
     public void TakeDamage(uint value)
     {
         _health.Decrease(value);
+    }
+
+    public uint Suck(uint value)
+    {
+        _view.Blink();
+
+        return _health.Decrease(value);
     }
 
     private void OnAtackPerforming()

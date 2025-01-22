@@ -8,6 +8,7 @@ public class Player : MonoBehaviour, IDamageable
     [SerializeField] private InputReader _input;
     [SerializeField] private Wallet _wallet;
     [SerializeField] private Health _health;
+    [SerializeField] private VampireAbility _vampireAbility;
 
     private Mover _mover;
     private Jumper _jumper;
@@ -54,6 +55,8 @@ public class Player : MonoBehaviour, IDamageable
         _detector.DamageableLost += OnDamageableLost;
 
         _attacker.AttackPerforming += OnAttackPerforming;
+
+        _vampireAbility.HealthSucked += OnEnemyHealthSucked;
     }
 
     private void OnDisable()
@@ -74,6 +77,8 @@ public class Player : MonoBehaviour, IDamageable
         _detector.DamageableLost -= OnDamageableLost;
 
         _attacker.AttackPerforming -= OnAttackPerforming;
+
+        _vampireAbility.HealthSucked -= OnEnemyHealthSucked;
     }
 
     public void TakeDamage(uint value)
@@ -150,5 +155,10 @@ public class Player : MonoBehaviour, IDamageable
         Vector2 direction = new Vector2(facingDirection, 0);
 
         _detector.SetEyeDirection(direction);
+    }
+
+    private void OnEnemyHealthSucked(uint value)
+    {
+        _health.Increase(value);
     }
 }

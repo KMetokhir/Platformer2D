@@ -5,18 +5,20 @@ public class Health : MonoBehaviour
     [SerializeField] private uint _maxValue = 100;
     [SerializeField] private uint _value;
 
-    public void Decrease(uint damage)
+    public uint Decrease(uint damage)
     {
         if (_value >= damage)
         {
             _value -= damage;
+            return damage;
         }
         else
         {
+            uint currentValue = _value;
             _value = 0;
-        }
 
-        Debug.Log(_value);
+            return currentValue;
+        }        
     }
 
     public void Increase(uint treatment)
