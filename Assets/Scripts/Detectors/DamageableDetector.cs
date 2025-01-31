@@ -26,6 +26,11 @@ public class DamageableDetector : MonoBehaviour
         StartDetecting();
     }
 
+    private void OnDisable()
+    {
+        StopDetecting();
+    }
+
     public void StartDetecting()
     {
         if (_isWork || _detectCoroutine != null)
@@ -37,7 +42,7 @@ public class DamageableDetector : MonoBehaviour
         _detectCoroutine = StartCoroutine(Detect());
     }
 
-    public void StopDetecting()
+    private void StopDetecting()
     {
         _isWork = false;
         _currentDemageable = null;

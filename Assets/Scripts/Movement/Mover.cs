@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D), typeof(GroundChecker))]
 public class Mover : MonoBehaviour
 {
     [SerializeField] private float speed = 8f;
@@ -8,8 +9,7 @@ public class Mover : MonoBehaviour
 
     private GroundChecker _groundChecker;
     private Rigidbody2D _rigidbody;
-
-    private bool _isInited = false;
+   
     private bool _isMoving = false;
 
     public event Action<float> FacingChanged;
@@ -18,39 +18,26 @@ public class Mover : MonoBehaviour
 
     public float HorizontalDirection { get; private set; }
 
+    private void Awake()
+    {
+        _groundChecker = GetComponent<GroundChecker>();
+        _rigidbody= GetComponent<Rigidbody2D>();
+
+        _rigidbody.gravityScale = _gravityScale;
+    }
+
     private void Update()
     {
-        if (_isInited == false)
-        {
-            return;
-        }
-
         SetIsMoving();
     }
 
     private void FixedUpdate()
     {
         Move();
-    }
-
-    public void Init(Rigidbody2D rigidbody, GroundChecker groundChecker)
-    {
-        if (_isInited)
-        {
-            return;
-        }
-
-        _isInited = true;
-        _rigidbody = rigidbody;
-        _groundChecker = groundChecker;
-
-        _rigidbody.gravityScale = _gravityScale;
-    }
+    }    
 
     public void SetHorizontalDirection(float horizontalMove)
     {
-        ThrowNotInitedException();
-
         if (horizontalMove != HorizontalDirection && horizontalMove != 0)
         {
             FacingChanged?.Invoke(horizontalMove);
@@ -86,14 +73,6 @@ public class Mover : MonoBehaviour
         if (_groundChecker.IsGrounded)
         {
             _rigidbody.velocity = new Vector2(HorizontalDirection * speed, _rigidbody.velocity.y);
-        }
-    }
-
-    private void ThrowNotInitedException()
-    {
-        if (_isInited == false)
-        {
-            throw new Exception("Mover dosen't inited");
         }
     }
 }

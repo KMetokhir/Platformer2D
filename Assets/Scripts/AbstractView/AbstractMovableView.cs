@@ -3,10 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class AbstractMovableView : MonoBehaviour
 {
-    public readonly int IsRuning = Animator.StringToHash(nameof(IsRuning));    
-    public readonly int Hit = Animator.StringToHash(nameof(Hit));
+    private readonly int IsRuning = Animator.StringToHash(nameof(IsRuning));
+    private readonly int Hit = Animator.StringToHash(nameof(Hit));
 
-    private bool _isFacingRight = true;
     private Animator _animator;
 
     protected Animator Animator => _animator;
@@ -29,16 +28,5 @@ public class AbstractMovableView : MonoBehaviour
     public void PlayAttackAnimation()
     {
         _animator.SetTrigger(Hit);
-    }
-
-    public void Flip(float facingDirection)
-    {
-        if (_isFacingRight && facingDirection < 0f || !_isFacingRight && facingDirection > 0f)
-        {
-            _isFacingRight = !_isFacingRight;
-            Vector3 localScale = transform.localScale;
-            localScale.x *= -1f;
-            transform.localScale = localScale;
-        }
     }
 }

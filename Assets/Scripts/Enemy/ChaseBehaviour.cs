@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ChaseBehaviour : AbstractMoveInBoundsBehaviour
+public class ChaseBehaviour : AbstractBehaviour
 {
     [SerializeField] private float _attackDistance;
     [SerializeField] private uint _damage;
@@ -21,7 +21,12 @@ public class ChaseBehaviour : AbstractMoveInBoundsBehaviour
 
         LookAtTarget();
 
-        TryChangeDirection(_target.position.x, _target.position.x);
+        float horizontalDirection = (_target.position.x - transform.position.x) / Mathf.Abs((_target.position.x - transform.position.x));
+
+        if (horizontalDirection != CurrentHorizontalDirection)
+        {
+            Move(horizontalDirection);
+        }
 
         if (_attacker.IsAtacking)
         {
@@ -30,9 +35,9 @@ public class ChaseBehaviour : AbstractMoveInBoundsBehaviour
         }
     }
 
-    public void Init(Transform target, Transform behaviourOwner, Mover mover, DamageableDetector detector, Attacker attacker)
+    public void Init(Transform target, Mover mover, DamageableDetector detector, Attacker attacker)
     {
-        Init(behaviourOwner, mover);
+        Init(mover);
 
         if (_isInited)
         {
@@ -83,7 +88,7 @@ public class ChaseBehaviour : AbstractMoveInBoundsBehaviour
 
     private void LookAtTarget()
     {
-        Vector2 direction = _target.position - Position;
+        Vector2 direction = _target.position - transform.position;
         _detector.SetEyeDirection(direction);
     }
 }

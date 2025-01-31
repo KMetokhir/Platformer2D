@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 
-public class PatrolBehaviour : AbstractMoveInBoundsBehaviour
+public class PatrolBehaviour : AbstractBehaviour
 {
-    private Vector2 _patrolAria;   
+    private const float RightHorizontalDirection = 1;
+    private const float LeftHorizontalDirection = -1;
+
+    private Vector2 _patrolAria;
     private DamageableDetector _detector;
 
-    private bool _isInited = false;   
+    private bool _isInited = false;
 
     private void Update()
     {
@@ -14,10 +17,10 @@ public class PatrolBehaviour : AbstractMoveInBoundsBehaviour
             return;
         }
 
-        if (TryChangeDirection( _patrolAria.x, _patrolAria.y))
+        if (TryChangeDirection(_patrolAria.x, _patrolAria.y))
         {
             SetEyeDirection();
-        }      
+        }
     }
 
     public override void Enter()
@@ -36,12 +39,12 @@ public class PatrolBehaviour : AbstractMoveInBoundsBehaviour
 
     public override void Exit()
     {
-        base.Exit();        
+        base.Exit();
     }
 
-    public void Init(Vector2 patrolAria, Transform behaviourOwner, Mover mover, DamageableDetector detector)
+    public void Init(Vector2 patrolAria, Mover mover, DamageableDetector detector)
     {
-        Init(behaviourOwner, mover);
+        Init(mover);
 
         if (_isInited)
         {
@@ -50,13 +53,47 @@ public class PatrolBehaviour : AbstractMoveInBoundsBehaviour
 
         _isInited = true;
 
-        _patrolAria = patrolAria;             
+        _patrolAria = patrolAria;
         _detector = detector;
-    }  
+    }
 
     private void SetEyeDirection()
     {
-        Vector2 direction = new Vector2(CurrentHorizontalDirection, 0); 
+        Vector2 direction = new Vector2(CurrentHorizontalDirection, 0);
         _detector.SetEyeDirection(direction);
+    }
+
+    private bool TryChangeDirection(float leftBound, float rightBound)
+    {
+        if (TryGetHorizontalDirection(leftBound, rightBound, out float direction))
+        {
+            if (CurrentHorizontalDirection != direction)
+            {
+                Move(direction);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool TryGetHorizontalDirection(float leftBound, float rightBound, out float horizontalDirection)
+    {
+        bool isSuccess = false;
+        horizontalDirection = 0;
+
+        if (transform.position.x >= rightBound)
+        {
+            horizontalDirection = LeftHorizontalDirection;
+            isSuccess = true;
+        }
+        else if (transform.position.x <= leftBound)
+        {
+            horizontalDirection = RightHorizontalDirection;
+            isSuccess = true;
+        }
+
+        return isSuccess;
     }
 }

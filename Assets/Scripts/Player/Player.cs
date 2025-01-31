@@ -2,21 +2,20 @@ using UnityEngine;
 
 [RequireComponent(typeof(Mover), typeof(Rigidbody2D), typeof(PlayerView))]
 [RequireComponent(typeof(CollisionChecker), (typeof(GroundChecker)))]
-[RequireComponent(typeof(Jumper))]
+[RequireComponent(typeof(Jumper), typeof(Rotator))]
 public class Player : MonoBehaviour, IDamageable
 {
     [SerializeField] private InputReader _input;
     [SerializeField] private Wallet _wallet;
     [SerializeField] private Health _health;
-    [SerializeField] private VampireAbility _vampireAbility;
 
     private Mover _mover;
     private Jumper _jumper;
     private PlayerView _view;
     private CollisionChecker _collisionChecker;
-    private GroundChecker _groundChecker;
     private DamageableDetector _detector;
     private Attacker _attacker;
+    private Rotator _rotator;
 
     public Transform Transform => transform;
 
@@ -26,13 +25,9 @@ public class Player : MonoBehaviour, IDamageable
 
         _mover = GetComponent<Mover>();
         _jumper = GetComponent<Jumper>();
-        Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
         _view = GetComponent<PlayerView>();
-        _groundChecker = GetComponent<GroundChecker>();
         _attacker = GetComponent<Attacker>();
-
-        _mover.Init(rigidbody, _groundChecker);
-        _jumper.Init(rigidbody, _groundChecker);
+        _rotator = GetComponent<Rotator>();
 
         _collisionChecker = GetComponent<CollisionChecker>();
     }
@@ -55,8 +50,6 @@ public class Player : MonoBehaviour, IDamageable
         _detector.DamageableLost += OnDamageableLost;
 
         _attacker.AttackPerforming += OnAttackPerforming;
-
-        _vampireAbility.HealthSucked += OnEnemyHealthSucked;
     }
 
     private void OnDisable()
@@ -77,8 +70,6 @@ public class Player : MonoBehaviour, IDamageable
         _detector.DamageableLost -= OnDamageableLost;
 
         _attacker.AttackPerforming -= OnAttackPerforming;
-
-        _vampireAbility.HealthSucked -= OnEnemyHealthSucked;
     }
 
     public void TakeDamage(uint value)
@@ -102,12 +93,12 @@ public class Player : MonoBehaviour, IDamageable
     }
 
     private void OnDamageableFound(IDamageable damageable)
-    {        
+    {
         _attacker.StartAttack(damageable);
     }
 
     private void OnDamageableLost()
-    {        
+    {
         _attacker.StopAttack();
     }
 
@@ -150,15 +141,10 @@ public class Player : MonoBehaviour, IDamageable
 
     private void OnFacingchanged(float facingDirection)
     {
-        _view.Flip(facingDirection);       
+        _rotator.Flip(facingDirection);
 
         Vector2 direction = new Vector2(facingDirection, 0);
 
         _detector.SetEyeDirection(direction);
-    }
-
-    private void OnEnemyHealthSucked(uint value)
-    {
-        _health.Increase(value);
     }
 }

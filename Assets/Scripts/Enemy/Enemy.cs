@@ -1,8 +1,8 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Mover), typeof(Rigidbody2D), typeof(PatrolBehaviour))]
-[RequireComponent(typeof(GroundChecker), typeof(DamageableDetector))]
-public class Enemy : MonoBehaviour, IDamageable, IVampireTarget
+[RequireComponent(typeof(Mover), typeof(PatrolBehaviour), typeof(DamageableDetector))]
+[RequireComponent(typeof(Rotator))]
+public class Enemy : MonoBehaviour, IDamageable
 {
     [SerializeField] private Vector2 _patrolAria;
     [SerializeField] private Health _health;
@@ -12,8 +12,8 @@ public class Enemy : MonoBehaviour, IDamageable, IVampireTarget
     private ChaseBehaviour _chaseBehaviour;
 
     private Mover _mover;
-    private GroundChecker _groundChecker;
     private Attacker _attacker;
+    private Rotator _rotator;
 
     private EnemyView _view;
 
@@ -22,15 +22,12 @@ public class Enemy : MonoBehaviour, IDamageable, IVampireTarget
     private void Awake()
     {
         _mover = GetComponent<Mover>();
-        Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
-        _groundChecker = GetComponent<GroundChecker>();
         _attacker = GetComponent<Attacker>();
         _detector = GetComponent<DamageableDetector>();
-
-        _mover.Init(rigidbody, _groundChecker);
+        _rotator = GetComponent<Rotator>();
 
         _patrolBehaviour = GetComponent<PatrolBehaviour>();
-        _patrolBehaviour.Init(_patrolAria, transform, _mover, _detector);
+        _patrolBehaviour.Init(_patrolAria, _mover, _detector);
 
         _chaseBehaviour = GetComponent<ChaseBehaviour>();
 
@@ -71,13 +68,6 @@ public class Enemy : MonoBehaviour, IDamageable, IVampireTarget
         _health.Decrease(value);
     }
 
-    public uint Suck(uint value)
-    {
-        _view.Blink();
-
-        return _health.Decrease(value);
-    }
-
     private void OnAtackPerforming()
     {
         _view.PlayAttackAnimation();
@@ -92,7 +82,7 @@ public class Enemy : MonoBehaviour, IDamageable, IVampireTarget
     {
         _patrolBehaviour.Exit();
 
-        _chaseBehaviour.Init(damageable.Transform, transform, _mover, _detector, _attacker);
+        _chaseBehaviour.Init(damageable.Transform, _mover, _detector, _attacker);
         _chaseBehaviour.Enter();
     }
 
@@ -109,6 +99,6 @@ public class Enemy : MonoBehaviour, IDamageable, IVampireTarget
 
     private void OnFacingchanged(float facingDirection)
     {
-        _view.Flip(facingDirection);
+        _rotator.Flip(facingDirection);
     }
 }

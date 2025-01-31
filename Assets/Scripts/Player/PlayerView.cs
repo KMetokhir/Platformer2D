@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerView : AbstractMovableView
 {
-    public readonly int IsJumping = Animator.StringToHash(nameof(IsJumping));
+    private readonly int IsJumping = Animator.StringToHash(nameof(IsJumping));
 
     public void PlayJump()
     {

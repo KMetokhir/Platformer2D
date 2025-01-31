@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D), typeof(GroundChecker))]
 public class Jumper : MonoBehaviour
 {
     [SerializeField] private float jumpingPower = 700f;
@@ -9,11 +10,16 @@ public class Jumper : MonoBehaviour
     private Rigidbody2D _rigidbody;
 
     private bool _canJump = false;
-    private bool _isJumping = false;
-    private bool _isInited = false;
+    private bool _isJumping = false; 
 
     public event Action JumpStart;
     public event Action JumpEnd;
+
+    private void Awake()
+    {
+        _groundChecker = GetComponent<GroundChecker>();
+        _rigidbody = GetComponent<Rigidbody2D>();
+    }
 
     private void FixedUpdate()
     {
@@ -27,24 +33,10 @@ public class Jumper : MonoBehaviour
             JumpEnd?.Invoke();
             _isJumping = false;
         }
-    }
-
-    public void Init(Rigidbody2D rigidbody, GroundChecker groundChecker)
-    {
-        if (_isInited)
-        {
-            return;
-        }
-
-        _isInited = true;
-        _rigidbody = rigidbody;
-        _groundChecker = groundChecker;
-    }
+    }    
 
     public void SetJump()
-    {
-        ThrowNotInitedException();
-
+    {       
         _canJump = true;
     }
 
@@ -63,13 +55,5 @@ public class Jumper : MonoBehaviour
 
             JumpStart?.Invoke();
         }
-    }
-
-    private void ThrowNotInitedException()
-    {
-        if (_isInited == false)
-        {
-            throw new Exception("Jumper dosen't inited");
-        }
-    }
+    }    
 }
