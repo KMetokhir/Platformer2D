@@ -1,22 +1,15 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-public class PatrolBehaviour : AbstractBehaviour
+public class PatrolState : EnemyState
 {
     private const float RightHorizontalDirection = 1;
     private const float LeftHorizontalDirection = -1;
 
-    private Vector2 _patrolAria;
-    private DamageableDetector _detector;
-
-    private bool _isInited = false;
+    [SerializeField] private DamageableDetector _detector;
+    [SerializeField] private Vector2 _patrolAria;
 
     private void Update()
     {
-        if (_isInited == false || base.IsActive == false)
-        {
-            return;
-        }
-
         if (TryChangeDirection(_patrolAria.x, _patrolAria.y))
         {
             SetEyeDirection();
@@ -25,36 +18,15 @@ public class PatrolBehaviour : AbstractBehaviour
 
     public override void Enter()
     {
-        if (_isInited == false || base.IsActive)
-        {
-            return;
-        }
-
         base.Enter();
 
         Move(RightHorizontalDirection);
-
         SetEyeDirection();
     }
 
     public override void Exit()
     {
         base.Exit();
-    }
-
-    public void Init(Vector2 patrolAria, Mover mover, DamageableDetector detector)
-    {
-        Init(mover);
-
-        if (_isInited)
-        {
-            return;
-        }
-
-        _isInited = true;
-
-        _patrolAria = patrolAria;
-        _detector = detector;
     }
 
     private void SetEyeDirection()

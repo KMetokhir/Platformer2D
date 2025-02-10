@@ -1,16 +1,13 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
 public abstract class CollectableView : MonoBehaviour
 {
-    private const string RunBoolVariable = "IsDestroy";
+    [SerializeField] private CollectableAnimator _collectableAnimator;
 
     private Collectable _collectableModel;
-    private Animator _animator;
 
     private void Awake()
     {
-        _animator = GetComponent<Animator>();
         _collectableModel = GetComponent<Collectable>();
     }
 
@@ -31,6 +28,6 @@ public abstract class CollectableView : MonoBehaviour
 
     private void OnCoinCollected()
     {
-        _animator.SetBool(RunBoolVariable, true);
+        _collectableAnimator.PlayDestroyAnimation();
     }
 }

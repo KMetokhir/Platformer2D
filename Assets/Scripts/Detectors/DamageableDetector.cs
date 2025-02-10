@@ -21,6 +21,8 @@ public class DamageableDetector : MonoBehaviour
     public event Action DamageableLost;
     public event Action<IDamageable, float> SqrDistanceChanged;
 
+    public Vector2 DamageablePosition => _currentDemageable.Transform.position;
+
     private void Start()
     {
         StartDetecting();
@@ -31,7 +33,7 @@ public class DamageableDetector : MonoBehaviour
         StopDetecting();
     }
 
-    public void StartDetecting()
+    private void StartDetecting()
     {
         if (_isWork || _detectCoroutine != null)
         {

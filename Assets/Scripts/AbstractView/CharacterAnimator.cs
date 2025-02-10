@@ -1,10 +1,10 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public class AbstractMovableView : MonoBehaviour
+public  class CharacterAnimator : MonoBehaviour
 {
-    private readonly int IsRuning = Animator.StringToHash(nameof(IsRuning));
-    private readonly int Hit = Animator.StringToHash(nameof(Hit));
+    private readonly int _isRuning = Animator.StringToHash("IsRuning");
+    private readonly int _hit = Animator.StringToHash("Hit");
 
     private Animator _animator;
 
@@ -16,17 +16,17 @@ public class AbstractMovableView : MonoBehaviour
     }
 
     public void PlayRunAnimation()
-    {
-        _animator.SetBool(IsRuning, true);
+    {       
+        _animator.SetBool(_isRuning, true);
     }
 
     public void PlayIdleAnimation()
     {
-        _animator.SetBool(IsRuning, false);
+        _animator.SetBool(_isRuning, false);
     }
 
     public void PlayAttackAnimation()
     {
-        _animator.SetTrigger(Hit);
+        _animator.SetTrigger(_hit);
     }
 }

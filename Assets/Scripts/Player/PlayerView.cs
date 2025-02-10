@@ -1,18 +1,18 @@
 using UnityEngine;
 
-public class PlayerView : AbstractMovableView
+public class PlayerView : CharacterAnimator
 {
-    private readonly int IsJumping = Animator.StringToHash(nameof(IsJumping));
+    private readonly int _isJumping = Animator.StringToHash("IsJumping");
 
     public void PlayJump()
     {
         bool isJumping = true;
-        Animator.SetBool(IsJumping, isJumping);
+        Animator.SetBool(_isJumping, isJumping);
     }
 
     public void StopPlayingJump()
     {
         bool isJumping = false;
-        Animator.SetBool(IsJumping, isJumping);
+        Animator.SetBool(_isJumping, isJumping);
     }
 }

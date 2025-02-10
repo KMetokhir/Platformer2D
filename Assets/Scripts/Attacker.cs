@@ -13,6 +13,7 @@ public class Attacker : MonoBehaviour
     public event Action AttackPerforming;
 
     public bool IsAtacking { get; private set; }
+    public float AttackDistance => _attackDistance;
 
     private void Start()
     {

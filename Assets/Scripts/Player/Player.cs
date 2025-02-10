@@ -135,7 +135,7 @@ public class Player : MonoBehaviour, IDamageable
     }
 
     private void OnStartsMoving()
-    {
+    {      
         _view.PlayRunAnimation();
     }
 
