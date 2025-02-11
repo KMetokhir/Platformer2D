@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(GroundChecker))]
 public class Jumper : MonoBehaviour
 {
-    [SerializeField] private float jumpingPower = 700f;
+    [SerializeField] private float _jumpingPower = 700f;
 
     private GroundChecker _groundChecker;
     private Rigidbody2D _rigidbody;
@@ -12,8 +12,8 @@ public class Jumper : MonoBehaviour
     private bool _canJump = false;
     private bool _isJumping = false; 
 
-    public event Action JumpStart;
-    public event Action JumpEnd;
+    public event Action JumpStarting;
+    public event Action JumpEnded;
 
     private void Awake()
     {
@@ -30,7 +30,7 @@ public class Jumper : MonoBehaviour
     {
         if (IsJumpEnd())
         {
-            JumpEnd?.Invoke();
+            JumpEnded?.Invoke();
             _isJumping = false;
         }
     }    
@@ -49,11 +49,11 @@ public class Jumper : MonoBehaviour
     {
         if (_groundChecker.IsGrounded && _canJump)
         {
-            _rigidbody.AddForce(Vector2.up * jumpingPower);
+            _rigidbody.AddForce(Vector2.up * _jumpingPower);
             _canJump = false;
             _isJumping = true;            
 
-            JumpStart?.Invoke();
+            JumpStarting?.Invoke();
         }
     }    
 }

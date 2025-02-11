@@ -1,11 +1,8 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public  class CharacterAnimator : MonoBehaviour
+public class CharacterAnimator : MonoBehaviour
 {
-    private readonly int _isRuning = Animator.StringToHash("IsRuning");
-    private readonly int _hit = Animator.StringToHash("Hit");
-
     private Animator _animator;
 
     protected Animator Animator => _animator;
@@ -16,17 +13,17 @@ public  class CharacterAnimator : MonoBehaviour
     }
 
     public void PlayRunAnimation()
-    {       
-        _animator.SetBool(_isRuning, true);
+    {
+        _animator.SetBool(AnimatorParameters.IsRuning, true);
     }
 
     public void PlayIdleAnimation()
     {
-        _animator.SetBool(_isRuning, false);
+        _animator.SetBool(AnimatorParameters.IsRuning, false);
     }
 
     public void PlayAttackAnimation()
     {
-        _animator.SetTrigger(_hit);
+        _animator.SetTrigger(AnimatorParameters.Hit);
     }
 }

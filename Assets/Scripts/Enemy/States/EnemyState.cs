@@ -2,7 +2,9 @@ using UnityEngine;
 
 public abstract class EnemyState : MonoBehaviour
 {
-    [SerializeField] private EnemyTransition[] _transitions;
+    [SerializeField] private EnemyState _targetState;
+    [SerializeField] private EnemyStateMachine _stateMachine;
+
     [SerializeField] private Mover _mover;
 
     protected float CurrentHorizontalDirection => _mover.HorizontalDirection;
@@ -17,35 +19,17 @@ public abstract class EnemyState : MonoBehaviour
         if (enabled == false)
         {
             enabled = true;
-
-            foreach (var transition in _transitions)
-            {
-                transition.Activate();
-            }
         }
     }
 
     public virtual void Exit()
     {
-        foreach (var transition in _transitions)
-        {
-            transition.Deactivate();
-        }
-
         enabled = false;
     }
 
-    public EnemyState GetNextState()
+    protected void TransitToTarGetState()
     {
-        foreach (var transition in _transitions)
-        {
-            if (transition.NeedTransit)
-            {
-                return transition.TargetState;
-            }
-        }
-
-        return null;
+        _stateMachine.Transit(this, _targetState);
     }
 
     protected void Move(float direction)

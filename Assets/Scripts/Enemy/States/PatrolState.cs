@@ -20,12 +20,15 @@ public class PatrolState : EnemyState
     {
         base.Enter();
 
+        _detector.DamageableDetected += OnDamageableFound;
         Move(RightHorizontalDirection);
         SetEyeDirection();
     }
 
     public override void Exit()
     {
+        _detector.DamageableDetected -= OnDamageableFound;
+
         base.Exit();
     }
 
@@ -67,5 +70,10 @@ public class PatrolState : EnemyState
         }
 
         return isSuccess;
+    }
+
+    private void OnDamageableFound(IDamageable damageable)
+    {
+        TransitToTarGetState();
     }
 }

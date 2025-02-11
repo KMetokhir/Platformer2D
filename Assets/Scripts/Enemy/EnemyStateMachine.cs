@@ -1,3 +1,5 @@
+using System;
+using System.Data;
 using UnityEngine;
 
 public class EnemyStateMachine : MonoBehaviour
@@ -12,19 +14,13 @@ public class EnemyStateMachine : MonoBehaviour
         _currentState.Enter();
     }
 
-    private void Update()
+    public void Transit(EnemyState stateInvoker, EnemyState nextState)
     {
-        if (_currentState == null)
-            return;
+        if(_currentState!=stateInvoker && _currentState!=null)
+        {
+            throw new Exception($"State Invoker {stateInvoker.name} is not current active state  {_currentState.name}");
+        }
 
-        EnemyState nextState = _currentState.GetNextState();
-
-        if (nextState)
-            Transit(nextState);
-    }
-
-    private void Transit(EnemyState nextState)
-    {
         if (_currentState)
             _currentState.Exit();
 

@@ -38,10 +38,10 @@ public class Player : MonoBehaviour, IDamageable
         _mover.StartsMoving += OnStartsMoving;
         _mover.StopedMoving += OnStopedMoving;
 
-        _jumper.JumpStart += OnJumpStart;
-        _jumper.JumpEnd += OnJumpEnd;
+        _jumper.JumpStarting += OnJumpStart;
+        _jumper.JumpEnded += OnJumpEnd;
 
-        _collisionChecker.CollectableCollision += OnCollectableCollision;
+        _collisionChecker.CollectableCollided += OnCollectableCollision;
 
         _input.HorizontalDirectionChanged += OnInputHorizontalDirectionChanged;
         _input.JumpButtonPressed += OnJumpButtonPressed;
@@ -58,10 +58,10 @@ public class Player : MonoBehaviour, IDamageable
         _mover.StartsMoving -= OnStartsMoving;
         _mover.StopedMoving -= OnStopedMoving;
 
-        _jumper.JumpStart -= OnJumpStart;
-        _jumper.JumpEnd -= OnJumpEnd;
+        _jumper.JumpStarting -= OnJumpStart;
+        _jumper.JumpEnded -= OnJumpEnd;
 
-        _collisionChecker.CollectableCollision -= OnCollectableCollision;
+        _collisionChecker.CollectableCollided -= OnCollectableCollision;
 
         _input.HorizontalDirectionChanged -= OnInputHorizontalDirectionChanged;
         _input.JumpButtonPressed -= OnJumpButtonPressed;

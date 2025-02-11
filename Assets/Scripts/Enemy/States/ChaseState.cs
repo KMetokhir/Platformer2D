@@ -32,14 +32,21 @@ public class ChaseState : EnemyState
 
         base.Enter();
 
+        _detector.DamageableLost += OnDamageableLost;
         _detector.SqrDistanceChanged += OnSqrDistanceChanged;
     }
 
     public override void Exit()
     {
-        base.Exit();
-
         _detector.SqrDistanceChanged -= OnSqrDistanceChanged;
+        _detector.DamageableLost -= OnDamageableLost;
+
+        base.Exit();
+    }
+
+    private void OnDamageableLost()
+    {
+        TransitToTarGetState();
     }
 
     private void OnSqrDistanceChanged(IDamageable damageable, float sqrDistance)
