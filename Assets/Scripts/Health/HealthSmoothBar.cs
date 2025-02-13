@@ -1,0 +1,4 @@
+
+public class HealthSmoothBar : SmoothBarView
+{    
+}

@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Mover), typeof(DamageableDetector))]
 [RequireComponent(typeof(Rotator))]
-public class Enemy : MonoBehaviour, IDamageable
+public class Enemy : MonoBehaviour, IDamageable, IVampireTarget
 {
     [SerializeField] private Health _health;
 
@@ -39,6 +39,13 @@ public class Enemy : MonoBehaviour, IDamageable
         _mover.StopedMoving -= OnStopedMoving;
 
         _attacker.AttackPerforming -= OnAtackPerforming;
+    }
+
+    public uint Suck(uint value)
+    {
+        _view.Blink();
+
+        return _health.Decrease(value);
     }
 
     public void TakeDamage(uint value)

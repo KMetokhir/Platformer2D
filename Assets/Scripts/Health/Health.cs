@@ -1,12 +1,12 @@
 using System;
 using UnityEngine;
 
-public class Health : MonoBehaviour
+public class Health : MonoBehaviour, IChangeable
 {
     [SerializeField] private uint _maxValue = 100;
     [SerializeField] private uint _value;
 
-    public event Action<uint> ValueChanged;
+    public event Action<float> ValueChanged;
 
     public uint MaxValue => _maxValue;
 

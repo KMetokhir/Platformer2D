@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class SmoothHealthBarView : HealthBarView
+public abstract class SmoothBarView : BarView
 {
     [SerializeField] private float _fillSpeed = 0.2f;
 
@@ -15,9 +15,9 @@ public class SmoothHealthBarView : HealthBarView
         }
     }
 
-    protected override void OnValueChanged(uint value)
+    protected override void OnValueChanged(float value)
     {
-        _healthBar.maxValue = _health.MaxValue;
+        _bar.maxValue = _changeable.MaxValue;
 
         if (_currentCoroutine == null)
         {
@@ -32,9 +32,9 @@ public class SmoothHealthBarView : HealthBarView
 
     private IEnumerator SmoothFill(float targetValue)
     {
-        while (_healthBar.value != targetValue)
+        while (_bar.value != targetValue)
         {
-            _healthBar.value = Mathf.MoveTowards(_healthBar.value, targetValue, _fillSpeed);
+            _bar.value = Mathf.MoveTowards(_bar.value, targetValue, _fillSpeed);
 
             yield return null;
         }
