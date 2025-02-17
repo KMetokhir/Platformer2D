@@ -8,8 +8,9 @@ public class EnemyView : CharacterAnimator
     [SerializeField] private float _blinkSpeed;
 
     private SpriteRenderer _spriteRenderer;
-    private Coroutine _blinkCoroutine;
     private Color _customColor = Color.white;
+
+    private Coroutine _blinkCoroutine;
 
     private void Start()
     {

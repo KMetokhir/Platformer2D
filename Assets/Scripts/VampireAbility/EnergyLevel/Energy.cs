@@ -8,20 +8,20 @@ public class Energy : MonoBehaviour, IChangeable
     [SerializeField] private uint _rechargeTime;
 
     private float _currentEnergyLevel;
-    private uint _maxEnergy = 100;
+    private uint _maxEnergyLevel = 100;
     private float _minEnergyLevel = 0f;
+
+    private Coroutine _coroutine;
 
     public event Action EnergyEmpty;
     public event Action EnergyRecharged;
     public event Action<float> ValueChanged;
 
-    public uint MaxValue => _maxEnergy;
-
-    private Coroutine _coroutine;
+    public uint MaxValue => _maxEnergyLevel;
 
     private void Start()
     {
-        _currentEnergyLevel = _maxEnergy;
+        _currentEnergyLevel = _maxEnergyLevel;
         EnergyRecharged?.Invoke();
         ValueChanged?.Invoke(_currentEnergyLevel);
     }
@@ -52,39 +52,20 @@ public class Energy : MonoBehaviour, IChangeable
             yield return null;
         }
 
-        if (TryStartRecharge() == false)
-        {
-            EnergyRecharged?.Invoke();
-            _coroutine = null;
-        }
-        else
+        if (_currentEnergyLevel == _minEnergyLevel)
         {
             EnergyEmpty?.Invoke();
+            _coroutine = StartCoroutine(SmoothChange(_rechargeTime, _maxEnergyLevel));
         }
-    }
-
-    private bool TryStartRecharge()
-    {
-        bool isSucces;
-
-        if (_currentEnergyLevel == _maxEnergy)
+        else if (_currentEnergyLevel == _maxEnergyLevel)
         {
-            isSucces = false;
-
-            return isSucces;
-        }
-        else if (_currentEnergyLevel == _minEnergyLevel)
-        {
-            _coroutine = StartCoroutine(SmoothChange(_rechargeTime, _maxEnergy));
-            isSucces = true;
-
-            return isSucces;
+            EnergyRecharged?.Invoke();
         }
         else
         {
-            isSucces = false;
-
-            return isSucces;
+            throw new Exception("SmoothChange coroutine error in process");
         }
+
+        _coroutine = null;
     }
 }

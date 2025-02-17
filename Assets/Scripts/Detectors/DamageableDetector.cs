@@ -21,7 +21,7 @@ public class DamageableDetector : MonoBehaviour
     public event Action DamageableLost;
     public event Action<IDamageable, float> SqrDistanceChanged;
 
-    public Vector2 DamageablePosition => _currentDemageable.Transform.position;
+    public Vector2 DamageablePosition => _currentDemageable.Position;
 
     private void Start()
     {
@@ -67,7 +67,7 @@ public class DamageableDetector : MonoBehaviour
         {
             if (_currentDemageable != null)
             {
-                float sqrDistance = GetSqrDistance(_eyePoint.position, _currentDemageable.Transform.position);
+                float sqrDistance = GetSqrDistance(_eyePoint.position, _currentDemageable.Position);
 
                 if (_sqrDistanceToTarget != sqrDistance)
                 {

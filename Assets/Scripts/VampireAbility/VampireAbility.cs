@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +12,9 @@ public class VampireAbility : MonoBehaviour
     [SerializeField] private uint _suckPerIntervalValue;
     [SerializeField] private float _suckInterval;
 
-    private List<TargetCoroutinePair> _targetsInAria = new List<TargetCoroutinePair>();
+    private IVampireTarget _currentTarget;
+
+    private Coroutine _coroutine;
 
     private bool _isWorking = false;
 
@@ -21,8 +22,8 @@ public class VampireAbility : MonoBehaviour
 
     private void OnEnable()
     {
-        _vampireAria.TargetDetected += OnTargetDetected;
-        _vampireAria.TargetLost += OnTargetLost;
+        _vampireAria.TargetEntered += OnTargetEntered;
+        _vampireAria.AllTargetsLost += OnAllTargetsLost;
 
         _activateButton.onClick.AddListener(OnActivateButtonClick);
 
@@ -32,40 +33,37 @@ public class VampireAbility : MonoBehaviour
 
     private void OnDisable()
     {
-        _vampireAria.TargetDetected -= OnTargetDetected;
-        _vampireAria.TargetLost -= OnTargetLost;
+        _vampireAria.TargetEntered -= OnTargetEntered;
+        _vampireAria.AllTargetsLost -= OnAllTargetsLost;
 
         _activateButton.onClick.RemoveListener(OnActivateButtonClick);
 
         _energy.EnergyEmpty -= OnEnergyEmpty;
         _energy.EnergyRecharged -= OnEnergyRecharged;
 
-        StopAllCoroutines(_targetsInAria);
-    }
-
-    private void StopAllCoroutines(List<TargetCoroutinePair> targetsInAria)
-    {
-        foreach (TargetCoroutinePair target in targetsInAria)
+        if (_coroutine != null)
         {
-            target.Stop(this);
+            StopCoroutine(_coroutine);
         }
     }
 
-    private void OnTargetDetected(IVampireTarget target)
+    private void OnTargetEntered(IVampireTarget target)
     {
-        Coroutine coroutine = StartCoroutine(SmoothSuck(target));
-
-        TargetCoroutinePair targetCoroutinePair = new TargetCoroutinePair(target, coroutine);
-
-        _targetsInAria.Add(targetCoroutinePair);
+        if (_coroutine == null)
+        {
+            _coroutine = StartCoroutine(SmoothSuck(target));
+        }
     }
 
-    private void OnTargetLost(IVampireTarget target)
+    private void OnAllTargetsLost(IVampireTarget target)
     {
-        TargetCoroutinePair pairInAria = _targetsInAria.Find(x => x.Equals(target));
-        pairInAria.Stop(this);
+        if (_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+            _coroutine = null;
+        }
 
-        _targetsInAria.Remove(pairInAria);
+        _currentTarget = null;
     }
 
     private void OnActivateButtonClick()
@@ -79,6 +77,13 @@ public class VampireAbility : MonoBehaviour
 
     private void OnEnergyEmpty()
     {
+        if (_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+            _coroutine = null;
+        }
+
+        _currentTarget = null;
         _activateButton.interactable = false;
         _vampireAria.Deactivate();
         _isWorking = false;
@@ -92,10 +97,19 @@ public class VampireAbility : MonoBehaviour
     private IEnumerator SmoothSuck(IVampireTarget target)
     {
         WaitForSeconds waitingTime = new WaitForSeconds(_suckInterval);
+        _currentTarget = target;
 
         while (_isWorking)
         {
-            uint suckValue = target.Suck(_suckPerIntervalValue);
+            if (_vampireAria.TryGetClosestTarget(out IVampireTarget closestTarget))
+            {
+                if (_currentTarget != closestTarget)
+                {
+                    _currentTarget = closestTarget;
+                }
+            }
+
+            uint suckValue = _currentTarget.Suck(_suckPerIntervalValue);
             HealthSucked?.Invoke(suckValue);
 
             yield return waitingTime;

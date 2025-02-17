@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour, IDamageable, IVampireTarget
 
     private EnemyView _view;
 
-    public Transform Transform => transform;
+    public Vector2 Position => transform.position;
 
     private void Awake()
     {

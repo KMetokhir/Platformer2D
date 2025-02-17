@@ -18,7 +18,7 @@ public class Player : MonoBehaviour, IDamageable
     private Attacker _attacker;
     private Rotator _rotator;
 
-    public Transform Transform => transform;
+    public Vector2 Position => transform.position;
 
     private void Awake()
     {
